@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 
 import { Product } from "@/interfaces";
@@ -29,11 +29,6 @@ const ProductList = () => {
     }
   }, [products]);
 
-  const renderItem = useCallback(
-    ({ item }: { item: Product }) => <ProductItem {...item} />,
-    []
-  );
-
   if (isLoading && offset === 0) {
     return <Text>Loading</Text>;
   }
@@ -53,7 +48,7 @@ const ProductList = () => {
           data={items}
           numColumns={2}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={renderItem}
+          renderItem={({ item }) => <ProductItem {...item} />}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
@@ -61,12 +56,6 @@ const ProductList = () => {
               <Text className="text-center">Loading more...</Text>
             ) : null
           }
-          // Performance optimizations
-          removeClippedSubviews
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          updateCellsBatchingPeriod={50}
         />
       </View>
     </View>
