@@ -14,6 +14,18 @@ export const fakeStoreApi = createApi({
       query: ({ offset, limit }) =>
         `${BASE_URL}/products?offset=${offset}&limit=${limit}`,
     }),
+    getProductsByCategoryId: builder.query<
+      Product[],
+      {
+        id: string;
+      }
+    >({
+      query: (id) => {
+        const url = `${BASE_URL}/categories/${id}/products`;
+        console.log("url", url);
+        return url;
+      },
+    }),
     getProductById: builder.query<Product, string>({
       query: (id) => {
         const url = `${BASE_URL}/products/${id}`;
@@ -27,4 +39,5 @@ export const {
   useGetCategoriesQuery,
   useGetProductsQuery,
   useGetProductByIdQuery,
+  useGetProductsByCategoryIdQuery,
 } = fakeStoreApi;
