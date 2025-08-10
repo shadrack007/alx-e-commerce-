@@ -1,12 +1,22 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import { Product } from "@/interfaces";
 
 const ProductItem = (item: Product) => {
   const [imgError, setImgError] = useState(false);
+  const router = useRouter();
+
+  const goToProduct = (id: number) => {
+    router.push(`/product/${id}`);
+  };
+
   return (
-    <View className="flex-1 m-1 border border-gray-300 rounded-lg">
+    <TouchableOpacity
+      onPress={() => goToProduct(item.id)}
+      className="flex-1 m-1 border border-gray-300 rounded-lg"
+    >
       <Image
         source={
           imgError
@@ -26,7 +36,7 @@ const ProductItem = (item: Product) => {
         </View>
         <Text numberOfLines={2}>{item.description}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
