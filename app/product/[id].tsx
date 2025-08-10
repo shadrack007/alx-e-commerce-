@@ -20,11 +20,8 @@ const height = Dimensions.get("window").height;
 
 const ProductDetail = () => {
   const { id } = useLocalSearchParams();
-
   const insets = useSafeAreaInsets();
-
   const [imgError, setImgError] = useState(false);
-
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
