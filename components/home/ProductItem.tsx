@@ -1,0 +1,33 @@
+import { useState } from "react";
+import { Image, Text, View } from "react-native";
+
+import { Product } from "@/interfaces";
+
+const ProductItem = (item: Product) => {
+  const [imgError, setImgError] = useState(false);
+  return (
+    <View className="flex-1 m-1 border border-gray-300 rounded-lg">
+      <Image
+        source={
+          imgError
+            ? require("@/assets/images/icon.png")
+            : { uri: item.images[0] }
+        }
+        className="w-[100%] h-[150px]"
+        resizeMode="cover"
+        onError={() => setImgError(true)}
+      />
+      <View className="py-2 px-1 gap-3">
+        <View className="flex-row justify-between items-center">
+          <View className="bg-primary rounded-full p-2">
+            <Text className="text-white">{item.category.name}</Text>
+          </View>
+          <Text className="font-bold text-primary text-lg">${item.price}</Text>
+        </View>
+        <Text numberOfLines={2}>{item.description}</Text>
+      </View>
+    </View>
+  );
+};
+
+export default ProductItem;
