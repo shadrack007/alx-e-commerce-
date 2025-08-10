@@ -13,7 +13,17 @@ export const fakeStoreApi = createApi({
     getProducts: builder.query<Product[], void>({
       query: () => API_ENDPOINTS.PRODUCTS,
     }),
+    getProductById: builder.query<Product, string>({
+      query: (id) => {
+        const url = `${BASE_URL}/products/${id}`;
+        return url;
+      },
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, useGetProductsQuery } = fakeStoreApi;
+export const {
+  useGetCategoriesQuery,
+  useGetProductsQuery,
+  useGetProductByIdQuery,
+} = fakeStoreApi;
