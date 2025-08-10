@@ -10,8 +10,9 @@ export const fakeStoreApi = createApi({
     getCategories: builder.query<Category[], void>({
       query: () => API_ENDPOINTS.CATEGORIES,
     }),
-    getProducts: builder.query<Product[], void>({
-      query: () => API_ENDPOINTS.PRODUCTS,
+    getProducts: builder.query<Product[], { offset: number; limit: number }>({
+      query: ({ offset, limit }) =>
+        `${BASE_URL}/products?offset=${offset}&limit=${limit}`,
     }),
     getProductById: builder.query<Product, string>({
       query: (id) => {
