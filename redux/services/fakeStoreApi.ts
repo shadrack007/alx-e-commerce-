@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { API_ENDPOINTS, BASE_URL } from "@/constants";
+import { BASE_URL } from "@/constants";
 import { Category, Product } from "@/interfaces";
 
 export const fakeStoreApi = createApi({
@@ -8,7 +8,7 @@ export const fakeStoreApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
     getCategories: builder.query<Category[], void>({
-      query: () => API_ENDPOINTS.CATEGORIES,
+      query: () => `${BASE_URL}/categories`,
     }),
     getProducts: builder.query<Product[], { offset: number; limit: number }>({
       query: ({ offset, limit }) =>
