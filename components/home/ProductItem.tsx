@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import { Product } from "@/interfaces";
+import ProductCategoryPill from "../common/ProductCategoryPill";
 
 const ProductItem = (item: Product) => {
   const [imgError, setImgError] = useState(false);
@@ -28,10 +29,9 @@ const ProductItem = (item: Product) => {
         onError={() => setImgError(true)}
       />
       <View className="py-2 px-1 gap-3">
+        <Text className="text-xl font-semibold">{item.title}</Text>
         <View className="flex-row justify-between items-center">
-          <View className="bg-primary rounded-full p-2">
-            <Text className="text-white">{item.category.name}</Text>
-          </View>
+          <ProductCategoryPill category={item.category.name} />
           <Text className="font-bold text-primary text-lg">${item.price}</Text>
         </View>
         <Text numberOfLines={2}>{item.description}</Text>
