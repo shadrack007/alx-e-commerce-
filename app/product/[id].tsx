@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useLayoutEffect, useRef, useState } from "react";
-import { Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, Text, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import Carousel, {
   ICarouselInstance,
@@ -11,6 +11,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
+import PrimaryButton from "@/components/common/PrimaryButton";
 import ProductCategoryPill from "@/components/common/ProductCategoryPill";
 import { COLORS } from "@/constants";
 import { addToCart } from "@/redux/features/cart/cartSlice";
@@ -117,13 +118,11 @@ const ProductDetail = () => {
           paddingBottom: insets.bottom,
         }}
       >
-        <TouchableOpacity
+        <PrimaryButton
           onPress={handleAddToCart}
-          className="bg-primary py-4 rounded-lg"
           disabled={!product}
-        >
-          <Text className="text-center text-lg text-white">Add to Cart</Text>
-        </TouchableOpacity>
+          text="Add to Cart"
+        />
       </View>
     </SafeAreaView>
   );

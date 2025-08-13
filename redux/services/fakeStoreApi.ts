@@ -32,6 +32,12 @@ export const fakeStoreApi = createApi({
         return url;
       },
     }),
+    getFilteredProducts: builder.query<Product[], any>({
+      query: (params) => {
+        const searchParams = new URLSearchParams(params).toString();
+        return `${BASE_URL}/products/?${searchParams}`;
+      },
+    }),
   }),
 });
 
@@ -40,4 +46,5 @@ export const {
   useGetProductsQuery,
   useGetProductByIdQuery,
   useGetProductsByCategoryIdQuery,
+  useGetFilteredProductsQuery,
 } = fakeStoreApi;
