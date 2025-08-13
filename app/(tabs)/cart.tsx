@@ -1,7 +1,8 @@
 import { clearCart, removeFromCart } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Cart = () => {
   const dispatch = useAppDispatch();
@@ -24,20 +25,37 @@ const Cart = () => {
   }
 
   return (
-    <View className="flex-1 p-4">
+    <SafeAreaView className="flex-1 p-4">
       <FlatList
         data={cartItems}
         keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{
+          gap: 10,
+        }}
         renderItem={({ item }) => (
-          <View className="flex-row justify-between items-center mb-4 p-4 bg-gray-100 rounded-lg">
-            <Text className="text-lg">{item.title}</Text>
-            <Text className="text-gray-500">${item.price}</Text>
-            <TouchableOpacity
-              className="bg-red-500 p-2 rounded"
-              onPress={() => handleRemove(item.id)}
-            >
-              <Text className="text-white">Remove</Text>
-            </TouchableOpacity>
+          <View className="flex-row items-center gap-3">
+            <Image
+              className="rounded-lg"
+              style={{
+                width: 100,
+                height: 100,
+              }}
+              source={{
+                uri: item.images[0],
+              }}
+            />
+            <View>
+              <Text className="text-xl font-bold text-wrap">{item.title}</Text>
+              <Text className="text-primary font-bold text-xl">
+                ${item.price}
+              </Text>
+              <TouchableOpacity
+                className="bg-red-500 rounded py-2 w-20"
+                onPress={() => handleRemove(item.id)}
+              >
+                <Text className="text-white text-center text-lg">Remove</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
@@ -47,7 +65,7 @@ const Cart = () => {
       >
         <Text className="text-white font-bold">Clear Cart</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
