@@ -1,5 +1,4 @@
 import { COLORS } from "@/constants";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -38,14 +37,7 @@ const TabsLayout = () => {
           ),
         }}
       />
-      <Tabs.Screen
-        name="favorite"
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <AntDesign name="heart" size={size} color={color} />
-          ),
-        }}
-      />
+
       <Tabs.Screen
         name="cart"
         options={{
