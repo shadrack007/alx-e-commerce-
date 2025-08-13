@@ -1,20 +1,15 @@
+import PrimaryButton from "@/components/common/PrimaryButton";
+import SearchField from "@/components/common/TextInput";
+import ProductItem from "@/components/home/ProductItem";
 import { useGetFilteredProductsQuery } from "@/redux/services/fakeStoreApi";
 import React, { useState } from "react";
-import {
-  Button,
-  FlatList,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SearchScreen = () => {
   const [title, setTitle] = useState("");
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
-  const [categoryId, setCategoryId] = useState("");
   const [filters, setFilters] = useState<any>(null);
 
   const {
@@ -30,45 +25,32 @@ const SearchScreen = () => {
     if (title) params.title = title;
     if (priceMin) params.price_min = priceMin;
     if (priceMax) params.price_max = priceMax;
-    if (categoryId) params.categoryId = categoryId;
+
     setFilters(params);
   };
 
   return (
-    <SafeAreaView className="flex-1 p-4">
-      <TextInput
-        className="py-4 px-2 rounded-md border-2 focus:border-primary"
-        placeholder="Search by title"
+    <SafeAreaView className="flex-1 p-4 gap-4">
+      <SearchField
         value={title}
         onChangeText={setTitle}
+        placeholder="Search By Title.."
       />
-      <TextInput
-        placeholder="Min Price"
+
+      <SearchField
         value={priceMin}
         onChangeText={setPriceMin}
         keyboardType="numeric"
-        style={{ borderWidth: 1, padding: 8, marginBottom: 8 }}
+        placeholder="Min Price"
       />
-      <TextInput
-        placeholder="Max Price"
-        value={priceMax}
+      <SearchField
+        value={priceMin}
         onChangeText={setPriceMax}
         keyboardType="numeric"
-        style={{ borderWidth: 1, padding: 8, marginBottom: 8 }}
-      />
-      <TextInput
-        placeholder="Category ID"
-        value={categoryId}
-        onChangeText={setCategoryId}
-        keyboardType="numeric"
-        style={{ borderWidth: 1, padding: 8, marginBottom: 8 }}
+        placeholder="Max Price"
       />
 
-      <TouchableOpacity>
-        <Text className="text-white font-bold ">Search</Text>
-      </TouchableOpacity>
-
-      <Button title="Search" onPress={handleSearch} />
+      <PrimaryButton disabled={false} text="Search" onPress={handleSearch} />
 
       {isLoading && <Text>Loading...</Text>}
       {error && <Text>Error loading products</Text>}
@@ -76,12 +58,7 @@ const SearchScreen = () => {
       <FlatList
         data={products}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={{ paddingVertical: 8 }}>
-            <Text>{item.title}</Text>
-            <Text>${item.price}</Text>
-          </View>
-        )}
+        renderItem={({ item }) => <ProductItem {...item} />}
       />
     </SafeAreaView>
   );
