@@ -20,7 +20,7 @@ export const fakeStoreApi = createApi({
         id: string;
       }
     >({
-      query: (id) => {
+      query: ({ id }) => {
         const url = `${BASE_URL}/categories/${id}/products`;
         console.log("url", url);
         return url;

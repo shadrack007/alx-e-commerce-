@@ -1,134 +1,134 @@
+import { Category } from "@/interfaces";
+import {
+  useGetCategoriesQuery,
+  useGetProductsByCategoryIdQuery,
+} from "@/redux/services/fakeStoreApi";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 
-import { COLORS } from "@/constants";
-import { Product } from "@/interfaces";
-import {
-  useGetCategoriesQuery,
-  useGetProductsQuery,
-} from "@/redux/services/fakeStoreApi";
-import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import ProductItem from "./ProductItem";
 
-// page items limit
-const LIMIT = 10;
-
 const ProductList = () => {
-  const [offset, setOffset] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [items, setItems] = useState<Product[]>([]);
-
-  const {
-    data: products,
-    isLoading,
-    isFetching,
-    error,
-  } = useGetProductsQuery({
-    offset,
-    limit: LIMIT,
-  });
   const {
     data: categories,
-    isLoading: categoriesLoading,
-    error: categoryLoadingError,
+    isLoading: catLoading,
+    error: catError,
   } = useGetCategoriesQuery();
 
-  // Append new products when data changes
-  useEffect(() => {
-    if (products && products.length > 0) {
-      setItems((prev) => [...prev, ...products]);
-    }
-  }, [products]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  if (isLoading && offset === 0) {
+  // Auto select the first category id
+  useEffect(() => {
+    if (categories && categories.length > 0 && !selectedCategory) {
+      setSelectedCategory(categories[0].id.toString());
+    }
+  }, [categories, selectedCategory]);
+
+  // Fetch products based on the category
+  const {
+    data: items,
+    isLoading: productsLoading,
+    error: productsError,
+  } = useGetProductsByCategoryIdQuery(
+    selectedCategory ? { id: selectedCategory } : skipToken
+  );
+
+  // Categories loading/error/empty states
+  if (catLoading)
     return (
-      <View className="justify-center items-center">
-        <ActivityIndicator size="large" color={COLORS.primary} />
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#2563eb" />
+        <Text className="mt-2">Loading categories...</Text>
       </View>
     );
-  }
 
-  if (error)
-    return <Text className="text-red-500 text-lg">Error loading products</Text>;
-
-  if (categoriesLoading) return <Text className="text-lg">Loading...</Text>;
-
-  if (categoryLoadingError)
+  if (catError)
     return (
-      <Text className="text-red-500 text-lg">Error loading categories</Text>
+      <View className="flex-1 justify-center items-center">
+        <Text>Error loading categories</Text>
+      </View>
     );
 
-  const loadMore = () => {
-    if (!isFetching) {
-      setOffset((prev) => prev + LIMIT);
-    }
-  };
-
-  const onCategory = (categoryName: string) => {
-    setSelectedCategory(categoryName);
-  };
+  if (!categories || categories.length === 0)
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text>No categories found</Text>
+      </View>
+    );
 
   return (
-    <View className="h-full w-full">
+    <SafeAreaView className="h-full w-full">
+      {/* Categories Scroll */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{
-          flexGrow: 0,
-        }}
+        style={{ flexGrow: 0 }}
         className="px-4 py-8"
       >
         <View className="flex-row items-center gap-3">
-          <TouchableOpacity
-            className={`${selectedCategory === "All" ? "bg-primary rounded-lg p-3" : "bg-gray-200 rounded-lg p-3"}`}
-            onPress={() => onCategory("All")}
-          >
-            <Text
-              className={`${selectedCategory === "All"} ? "text-white": "text-black`}
+          {categories.map((cat: Category) => (
+            <TouchableOpacity
+              key={cat.id}
+              className={
+                selectedCategory === cat.id.toString()
+                  ? "bg-primary rounded-lg p-3"
+                  : "bg-gray-200 rounded-lg p-3"
+              }
+              onPress={() => setSelectedCategory(cat.id.toString())}
             >
-              All
-            </Text>
-          </TouchableOpacity>
-
-          <View className="flex-row gap-3">
-            {categories?.map((cat, index: number) => (
-              <TouchableOpacity
-                onPress={() => onCategory(cat.name)}
-                key={index}
-                className={`${selectedCategory === cat.name ? "bg-primary rounded-lg p-3" : "bg-gray-200 rounded-lg p-3"}`}
+              <Text
+                className={
+                  selectedCategory === cat.id.toString()
+                    ? "text-white"
+                    : "text-black"
+                }
               >
-                <Text
-                  className={`${selectedCategory === cat.name} ? "text-white": "text-black`}
-                >
-                  {cat.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+                {cat.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </ScrollView>
-      <View className="flex-1 gap-1">
-        <FlatList
-          data={items}
-          numColumns={2}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <ProductItem {...item} />}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            isFetching ? (
-              <Text className="text-center">Loading more...</Text>
-            ) : null
-          }
-        />
+
+      {/* Products Grid */}
+      <View className="flex-1 gap-1 px-4">
+        {productsLoading ? (
+          <View className="flex-1 justify-center items-center">
+            <ActivityIndicator size="large" color="#2563eb" />
+            <Text className="mt-2">Loading products...</Text>
+          </View>
+        ) : productsError ? (
+          <View className="flex-1 justify-center items-center">
+            <Text>Error loading products</Text>
+          </View>
+        ) : !items || items.length === 0 ? (
+          <View className="flex-1 justify-center items-center">
+            <Text>No products found</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={items}
+            numColumns={2}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <ProductItem {...item} />}
+            columnWrapperStyle={{
+              justifyContent: "space-between",
+              marginBottom: 16,
+            }}
+          />
+        )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
