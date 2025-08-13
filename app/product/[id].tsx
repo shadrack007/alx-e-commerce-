@@ -13,6 +13,8 @@ import {
 
 import ProductCategoryPill from "@/components/common/ProductCategoryPill";
 import { COLORS } from "@/constants";
+import { addToCart } from "@/redux/features/cart/cartSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { useGetProductByIdQuery } from "@/redux/services/fakeStoreApi";
 
 const width = Dimensions.get("window").width;
@@ -23,6 +25,7 @@ const ProductDetail = () => {
   const insets = useSafeAreaInsets();
   const [imgError, setImgError] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -53,6 +56,12 @@ const ProductDetail = () => {
       count: index - progress.value,
       animated: true,
     });
+  };
+
+  const handleAddToCart = () => {
+    if (product) {
+      dispatch(addToCart(product));
+    }
   };
 
   return (
@@ -108,7 +117,11 @@ const ProductDetail = () => {
           paddingBottom: insets.bottom,
         }}
       >
-        <TouchableOpacity className="bg-primary py-4 rounded-lg">
+        <TouchableOpacity
+          onPress={handleAddToCart}
+          className="bg-primary py-4 rounded-lg"
+          disabled={!product}
+        >
           <Text className="text-center text-lg text-white">Add to Cart</Text>
         </TouchableOpacity>
       </View>
