@@ -5,12 +5,6 @@ export interface Category {
   slug: string;
 }
 
-export interface CategoryState {
-  categories: Category[];
-  loading: boolean;
-  error: string | null;
-}
-
 export interface Product {
   id: number;
   title: string;
@@ -19,4 +13,8 @@ export interface Product {
   description: string;
   category: Category;
   images: string[];
+}
+
+interface CartState {
+  items: Product[];
 }
