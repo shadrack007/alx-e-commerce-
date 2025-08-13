@@ -16,6 +16,7 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { COLORS } from "@/constants";
 import ProductItem from "./ProductItem";
 
 const ProductList = () => {
@@ -47,7 +48,7 @@ const ProductList = () => {
   if (catLoading)
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#2563eb" />
+        <ActivityIndicator size="large" color={COLORS.primary} />
         <Text className="mt-2">Loading categories...</Text>
       </View>
     );
