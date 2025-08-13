@@ -15,6 +15,6 @@ export interface Product {
   images: string[];
 }
 
-interface CartState {
+export interface CartState {
   items: Product[];
 }
