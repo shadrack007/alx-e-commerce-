@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
 
 import "@/global.css";
@@ -16,6 +17,7 @@ export default function RootLayout() {
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           </Stack>
+          <Toast />
         </GestureHandlerRootView>
       </Provider>
     </SafeAreaProvider>
