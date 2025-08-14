@@ -47,24 +47,24 @@ const ProductList = () => {
   // Categories loading/error/empty states
   if (catLoading)
     return (
-      <View className="flex-1 justify-center items-center">
+      <SafeAreaView className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color={COLORS.primary} />
         <Text className="mt-2">Loading categories...</Text>
-      </View>
+      </SafeAreaView>
     );
 
   if (catError)
     return (
-      <View className="flex-1 justify-center items-center">
+      <SafeAreaView className="flex-1 justify-center items-center">
         <Text>Error loading categories</Text>
-      </View>
+      </SafeAreaView>
     );
 
   if (!categories || categories.length === 0)
     return (
-      <View className="flex-1 justify-center items-center">
+      <SafeAreaView className="flex-1 justify-center items-center">
         <Text>No categories found</Text>
-      </View>
+      </SafeAreaView>
     );
 
   return (
